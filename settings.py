@@ -1,0 +1,1 @@
+booking_url = 'https://www.booking.com/hotel/index.html?aid=304142&label=gen173nr-1FCAEoggI46AdIM1gEaA-IAQGYATG4ARjIAQ_YAQHoAQH4AQKIAgGoAgS4AsSjmrQGwAIB0gIkNTExZGViN2YtODRiZC00N2JmLWFjOWEtZGZhMTgyMTNmNTdm2AIF4AIB&sid=caaf0b08eb19ddc1422481803477c7d1'
