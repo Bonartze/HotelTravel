@@ -9,7 +9,7 @@ class Vizualize:
         self.data = None
 
     def get_coords(self):
-        with open('JsonData/hotels_data.json', 'r', encoding='utf-8') as f:
+        with open('hotels_info.json', 'r', encoding='utf-8') as f:
             self.data = json.load(f)
 
     def get_city_names(self):
@@ -66,13 +66,12 @@ class Vizualize:
             data=df,
             get_position=['longitude', 'latitude'],
             get_elevation=height_expression,
-            elevation_scale=1000,
+            elevation_scale=100,
             radius=500,
             get_fill_color='color',
             pickable=True,
             auto_highlight=True
         )
-
 
         if 'view_state' not in st.session_state:
             st.session_state.view_state = pdk.ViewState(

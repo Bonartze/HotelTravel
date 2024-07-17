@@ -1,4 +1,3 @@
-booking_url = 'https://www.booking.com/hotel/index.html?aid=304142&label=gen173nr-1FCAEoggI46AdIM1gEaA-IAQGYATG4ARjIAQ_YAQHoAQH4AQKIAgGoAgS4AsSjmrQGwAIB0gIkNTExZGViN2YtODRiZC00N2JmLWFjOWEtZGZhMTgyMTNmNTdm2AIF4AIB&sid=caaf0b08eb19ddc1422481803477c7d1'
 cities = [
     'eg/cairo',
     'ma/marrakech',
@@ -122,12 +121,10 @@ cities = [
     'hk/hong-kong',
     'mo/macau',
     'bn/bandar-seri-begawan',
-    'kh/phnom-penh',
     'np/kathmandu',
     'bt/thimphu',
     'mv/male',
     'np/pokhara',
-    'bn/bandar-seri-begawan',
     'kr/jeju',
     'tw/kaohsiung',
     'jp/nagoya',
@@ -168,5 +165,14 @@ cities = [
     'uz/tashkent',
     'kz/almaty',
     'kg/bishkek',
-    'mn/ulaanbaatar'
+    'mn/ulaanbaatar',
+    'ng/lagos',
+    'za/johannesburg',
+    'ke/nairobi',
+    'gh/accra',
+    'sn/dakar',
+    'et/addis-ababa'
+    'ug/kampala',
+    'cm/douala',
+    'zm/lusaka'
 ]
