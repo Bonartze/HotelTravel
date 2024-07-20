@@ -1,0 +1,7 @@
+pydeck==0.7.1
+streamlit
+pydeck
+pandas
+geopy
+beautifulsoup4
+requests
