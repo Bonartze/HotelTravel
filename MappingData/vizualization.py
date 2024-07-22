@@ -1,5 +1,4 @@
 import streamlit as st
-import webbrowser
 from .data_loader import DataLoader
 from .map_generator import MapGenerator
 
@@ -8,8 +7,7 @@ class Interface:
     def on_click_follow_link(self, selected_hotel):
         for entry in self.map_generator.data:
             if entry['name'] == selected_hotel:
-                picture_https = entry['website_https']
-                webbrowser.open(picture_https)
+                st.session_state.selected_hotel_link = entry['website_https']
                 break
 
     def __init__(self):
@@ -37,6 +35,8 @@ class Interface:
             selected_hotel = st.selectbox("Choose the hotel", [entry['name'] for entry in data_loader.data], index=1,
                                           placeholder='Select a hotel...')
             st.button('Follow the link', on_click=self.on_click_follow_link, args=(selected_hotel,))
+            if 'selected_hotel_link' in st.session_state:
+                st.markdown(f"[Follow the link]({st.session_state.selected_hotel_link})", unsafe_allow_html=True)
         with col2:
             st.header("Hotels Map")
             self.map_generator.generate_map(min_price, max_price, selected_city)
