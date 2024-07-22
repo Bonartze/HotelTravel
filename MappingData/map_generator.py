@@ -2,6 +2,7 @@ import pandas as pd
 import pydeck as pdk
 import streamlit as st
 
+
 class MapGenerator:
     def __init__(self, data):
         self.data = data
@@ -14,7 +15,8 @@ class MapGenerator:
         return names
 
     def generate_map(self, min_price, max_price, selected_city):
-        data_df = {'name': [], 'latitude': [], 'longitude': [], 'price': [], 'picture_https': []}
+        data_df = {'name': [], 'latitude': [], 'longitude': [], 'price': [], 'website_https': [],
+                   'hotel_evaluation': [], 'preview_comment': []}
 
         for key in self.data:
             if 'coordinates' in key and key['coordinates'] != 'Not found':
@@ -30,7 +32,9 @@ class MapGenerator:
                     data_df['latitude'].append(key['coordinates'][0])
                     data_df['longitude'].append(key['coordinates'][1])
                     data_df['price'].append(price)
-                    data_df['picture_https'].append(key.get('picture_https', 'No image available'))
+                    data_df['website_https'].append(key.get('website_https', 'No website available'))
+                    data_df['hotel_evaluation'].append(key.get('hotel_evaluation', 'No hotel evaluation'))
+                    data_df['preview_comment'].append(key.get('preview_comment', 'No hotel evaluation'))
 
         df = pd.DataFrame(data_df)
 
@@ -73,7 +77,7 @@ class MapGenerator:
         r = pdk.Deck(
             layers=[layer],
             initial_view_state=st.session_state.view_state,
-            tooltip={"text": "{name}\nPrice: ${price}"}
+            tooltip={"text": "{name}\nPrice: ${price}\n{hotel_evaluation}\nPreview comment: {preview_comment}"}
         )
 
         st.pydeck_chart(r, use_container_width=True)

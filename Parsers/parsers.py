@@ -60,10 +60,28 @@ class HotelsParse(Parser):
                 price = 'No price available'
 
             try:
-                image_tag = data.find('img', class_='cb3263eccd bf474a744b aae67e6639 ba85973b8a')
-                picture_https = image_tag['src'] if image_tag else 'No image available'
+                image_tag = data.find('a', class_='e5d7e430ba')
+                website_https = image_tag['href'] if image_tag else 'No website available'
             except AttributeError:
-                picture_https = 'No image available'
+                website_https = 'No image available'
+
+            try:
+                hotel_evaluation = data.find('div', class_='a447b19dfd')
+                if hotel_evaluation:
+                    hotel_evaluation_text = hotel_evaluation.text.strip()
+                else:
+                    hotel_evaluation_text = 'No hotel evaluation available'
+            except AttributeError:
+                hotel_evaluation_text = 'No hotel evaluation available'
+
+            try:
+                preview_comment = data.find('div', class_='e2585683de a66926738c')
+                if preview_comment:
+                    preview_comment_text = preview_comment.text.strip()
+                else:
+                    preview_comment_text = 'No hotel evaluation available'
+            except AttributeError:
+                preview_comment_text = 'No hotel evaluation available'
 
             if hotel_name != 'No name available' and address != 'No address available' and price != 'No price available':
                 location = self.geocode(hotel_name)
@@ -82,7 +100,9 @@ class HotelsParse(Parser):
                         'description': description,
                         'price': price,
                         'coordinates': coordinates,
-                        'picture_https': picture_https
+                        'website_https': website_https,
+                        'hotel_evaluation': hotel_evaluation_text,
+                        'preview_comment': preview_comment_text
                     })
 
     def parse_pages(self):
@@ -92,7 +112,7 @@ class HotelsParse(Parser):
             self.parse_page(url)
 
     def write_into_json(self):
-        with open('../hotels_data.json', 'w', encoding='utf-8') as f:
+        with open('../MappingData/hotels_data_backup.json', 'w', encoding='utf-8') as f:
             json.dump(self.hotels, f, ensure_ascii=False, indent=4)
 
 
