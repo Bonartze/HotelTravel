@@ -36,7 +36,9 @@ class Interface:
                                           placeholder='Select a hotel...')
             st.button('Follow the link', on_click=self.on_click_follow_link, args=(selected_hotel,))
             if 'selected_hotel_link' in st.session_state:
-                st.markdown(f"[Follow the link]({st.session_state.selected_hotel_link})", unsafe_allow_html=True)
+                st.markdown(
+                    f"[Link to the page of {selected_hotel} on booking.com]({st.session_state.selected_hotel_link})",
+                    unsafe_allow_html=True)
         with col2:
             st.header("Hotels Map")
             self.map_generator.generate_map(min_price, max_price, selected_city)
