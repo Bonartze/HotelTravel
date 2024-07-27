@@ -34,7 +34,7 @@ class Interface:
                 0, 1000, (0, 1000))
             selected_hotel = st.selectbox("Choose the hotel", [entry['name'] for entry in data_loader.data], index=1,
                                           placeholder='Select a hotel...')
-            st.button('Follow the link', on_click=self.on_click_follow_link, args=(selected_hotel,))
+            st.button('Show the link', on_click=self.on_click_follow_link, args=(selected_hotel,))
             if 'selected_hotel_link' in st.session_state:
                 st.markdown(
                     f"[Link to the page of {selected_hotel} on booking.com]({st.session_state.selected_hotel_link})",

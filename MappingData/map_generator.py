@@ -16,7 +16,7 @@ class MapGenerator:
 
     def generate_map(self, min_price, max_price, selected_city):
         data_df = {'name': [], 'latitude': [], 'longitude': [], 'price': [], 'website_https': [],
-                   'hotel_evaluation': [], 'preview_comment': []}
+                   'hotel_evaluation': [], 'preview_comment': [], 'picture_https': []}
 
         for key in self.data:
             if 'coordinates' in key and key['coordinates'] != 'Not found':
@@ -35,6 +35,7 @@ class MapGenerator:
                     data_df['website_https'].append(key.get('website_https', 'No website available'))
                     data_df['hotel_evaluation'].append(key.get('hotel_evaluation', 'No hotel evaluation'))
                     data_df['preview_comment'].append(key.get('preview_comment', 'No hotel evaluation'))
+                    data_df['picture_https'].append(key.get('picture_https', 'No picture available'))
 
         df = pd.DataFrame(data_df)
 
@@ -73,11 +74,18 @@ class MapGenerator:
                 zoom=2,
                 pitch=90
             )
-
         r = pdk.Deck(
             layers=[layer],
             initial_view_state=st.session_state.view_state,
-            tooltip={"text": "{name}\nPrice: ${price}\n{hotel_evaluation}\nPreview comment: {preview_comment}"}
+            tooltip={
+                "html": "<b>{name}</b><br>Price: ${price}<br>{hotel_evaluation}<br>Preview comment: {preview_comment}<br><img src='{picture_https}' width='100' height='100'>",
+                "style": {
+                    "backgroundColor": "steelblue",
+                    "color": "white"
+                }
+
+            }
+
         )
 
         st.pydeck_chart(r, use_container_width=True)

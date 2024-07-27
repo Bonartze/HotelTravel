@@ -2,19 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from MappingData.settings import cities
 import json
-from abc import ABC, abstractmethod
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
-
-
-class Parser(ABC):
-    @abstractmethod
-    def parse_page(self, url):
-        pass
-
-    @abstractmethod
-    def parse_pages(self):
-        pass
+from parser_template import Parser
 
 
 class HotelsParse(Parser):
@@ -83,6 +73,15 @@ class HotelsParse(Parser):
             except AttributeError:
                 preview_comment_text = 'No hotel evaluation available'
 
+            try:
+                picture_https = data.find('img', class_='cb3263eccd bf474a744b aae67e6639 ba85973b8a')
+                if picture_https:
+                    picture_https = picture_https.get('src')
+                else:
+                    picture_https = 'No picture evaluation available'
+            except AttributeError:
+                picture_https = 'No picture evaluation available'
+
             if hotel_name != 'No name available' and address != 'No address available' and price != 'No price available':
                 location = self.geocode(hotel_name)
                 coordinates = (location.latitude, location.longitude) if location else "Not found"
@@ -102,7 +101,8 @@ class HotelsParse(Parser):
                         'coordinates': coordinates,
                         'website_https': website_https,
                         'hotel_evaluation': hotel_evaluation_text,
-                        'preview_comment': preview_comment_text
+                        'preview_comment': preview_comment_text,
+                        'picture_https': picture_https
                     })
 
     def parse_pages(self):
@@ -112,7 +112,7 @@ class HotelsParse(Parser):
             self.parse_page(url)
 
     def write_into_json(self):
-        with open('../MappingData/hotels_data_backup.json', 'w', encoding='utf-8') as f:
+        with open('../JsonData/hotels_data_backup.json', 'w', encoding='utf-8') as f:
             json.dump(self.hotels, f, ensure_ascii=False, indent=4)
 
 
