@@ -1,4 +1,3 @@
-GPT_API_KEY = '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'
 cities = [
     'eg/cairo',
     'ma/marrakech',
