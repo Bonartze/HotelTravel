@@ -9,3 +9,7 @@ class Parser(ABC):
     @abstractmethod
     def parse_pages(self):
         pass
+
+    @abstractmethod
+    def write_into_json(self):
+        pass

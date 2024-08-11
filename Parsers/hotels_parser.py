@@ -112,7 +112,7 @@ class HotelsParse(Parser):
             self.parse_page(url)
 
     def write_into_json(self):
-        with open('../JsonData/hotels_data_backup.json', 'w', encoding='utf-8') as f:
+        with open('../JsonData/hotels_data.json', 'w', encoding='utf-8') as f:
             json.dump(self.hotels, f, ensure_ascii=False, indent=4)
 
 

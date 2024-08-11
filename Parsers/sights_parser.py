@@ -1,14 +1,10 @@
-from parser_template import Parser
-from MappingData.settings import cities
+import requests
+from bs4 import BeautifulSoup
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
-import time
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+from parser_template import Parser
+from MappingData.settings import countries
+import json
 
 
 class SightsParser(Parser):
@@ -17,48 +13,62 @@ class SightsParser(Parser):
         self.sights = []
         self.geolocator = Nominatim(user_agent="sight_locator")
         self.geocode = RateLimiter(self.geolocator.geocode, min_delay_seconds=1)
-        options = Options()
-        options.add_argument("--lang=en")
-        self.driver = webdriver.Chrome(options=options)
 
     def parse_page(self, url):
-        self.driver.get(url)
+        response = requests.get(url)
+        if response.status_code != 200:
+            print(f"Failed to fetch the page {url}: {response.status_code}")
+            return
 
-        el = self.driver.find_element(By.CSS_SELECTOR,
-                                      "body > div:nth-child(1) > div:nth-child(2) > div > div.css-ngwlx1 > div > div > div:nth-child(1) > div > div.css-1egjanf > div > div > a")
-        el.click()
-        time.sleep(15)
-
-        soup = BeautifulSoup(self.driver.page_source, 'lxml')
-        parsed_page = soup.find_all('li', attrs={
-            'class': 'f9637b0646 fe20ba46fc'})
+        soup = BeautifulSoup(response.text, 'html.parser')
+        parsed_page = soup.find_all('div', attrs={
+            'class': 'cursor-pointer aon-card h-full w-full'})
         for data in parsed_page:
             try:
-                name = data.find('a', attrs={'class': 'css-6c5ifu'}).text
+                name = data.find('h4', attrs={'class': 'text-xl font-semibold leading-5 tracking-wider'}).text
             except AttributeError:
                 name = 'No name available'
             try:
-                country = data.find('div', attrs={'class': 'css-1utx3w7'}).text
+                country = data.find('h3',
+                                    attrs={'class': 'text-xs font-semibold uppercase leading-4 tracking-widest'}).text
             except AttributeError:
                 country = 'No country available'
             try:
-                rate = data.find('span', attrs={'class': 'e2585683de css-35ezg3'}).text
+                preview_comment = data.find('div', attrs={
+                    'class': 'font-ao-serif my-1 text-base font-light leading-snug sm:leading-5'}).text
             except AttributeError:
-                rate = 'No rate available'
+                preview_comment = 'No rate available'
             try:
-                picture_https = data.find('img', attrs={'class': 'css-17k46x'}).get('src')
+                picture_https = data.find('img', attrs={'class': 'w-full bg-gray-100'}).get('src')
             except AttributeError:
                 picture_https = None
+            try:
+                website_ref = data.find('figure', attrs={'class': 'relative block w-full'}).find('a').get('href')
+            except AttributeError:
+                website_ref = None
             coordinates = self.geocode(name)
-            print(country, name, rate, picture_https, coordinates)
-
+            if coordinates:
+                self.sights.append({'name': name,
+                                    'preview_comment': preview_comment,
+                                    'coordinates': (coordinates.latitude, coordinates.longitude),
+                                    'picture_https': picture_https,
+                                    'website_link': 'https://www.atlasobscura.com' + website_ref})
+                # print(name, country, preview_comment, picture_https, f"https://www.atlasobscura.com{website_ref}",
+                #      coordinates.latitude, coordinates.longitude)
 
     def parse_pages(self):
-        for tag in cities:
-            url = f'https://www.booking.com/attractions/city/{tag}.html'
+        base_url = "https://www.atlasobscura.com/things-to-do/"
+        urls = [f"{base_url}{country}" for country, city in
+                countries.items()]
+        for url in urls:
             print(url)
             self.parse_page(url)
+
+    def write_into_json(self):
+        with open('../JsonData/attractions_data.json', 'w', encoding='utf-8') as f:
+            json.dump(self.sights, f, ensure_ascii=False, indent=4)
 
 
 sp = SightsParser()
 sp.parse_pages()
+sp.write_into_json()
