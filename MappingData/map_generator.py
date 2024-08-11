@@ -65,7 +65,7 @@ class MapGenerator:
 
         def get_color(price_normalized):
             if pd.isna(price_normalized) or price_normalized == 0:
-                return [0, 0, 255]
+                return [0, 150, 255]
             red = int(price_normalized * 255)
             green = int((1 - price_normalized) * 255)
             return [red, green, 0]
