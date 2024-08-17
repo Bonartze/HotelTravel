@@ -1,0 +1,6 @@
+README.md
+run_linters.sh
+check_websites_availability.sh
+venv
+.gitignore
+.devcontainer

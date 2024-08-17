@@ -3,6 +3,7 @@ streamlit==1.18.1
 numpy
 pandas
 openpyxl
+altair==4.2.2
 geopy==2.2.0
 beautifulsoup4==4.10.0
 requests==2.27.1
