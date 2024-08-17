@@ -3,7 +3,7 @@
 using json = nlohmann::json;
 
 Calculations::Calculations() {
-    json_data = json::parse(std::ifstream("/home/ivan/opencv/HottelTravel/JsonData/hotels_data.json"));
+    json_data = json::parse(std::ifstream("../../../JsonData/hotels_data.json"));
 }
 
 std::any Calculations::get_answer(const std::string &message) {

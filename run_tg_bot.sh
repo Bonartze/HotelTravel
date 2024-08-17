@@ -8,6 +8,7 @@ fi
 echo "Running CalculationServer..."
 
 cd ./Telegram/Calculation_Server/ || exit 1
+rm -rf build # Remove the existing build directory
 mkdir -p build
 cd build || exit 1
 

@@ -5,6 +5,7 @@ from data_setup import DataSetup
 from MappingData.data_loader import DataLoader
 from geopy.distance import geodesic
 from server_queries import ServerConnection
+import matplotlib.pyplot as plt
 
 bot = telebot.TeleBot(os.getenv('BOT_TOKEN'))
 
@@ -17,7 +18,7 @@ def send_welcome(message):
     calculations = types.InlineKeyboardButton('List of calculations', callback_data='calculations')
     hotels_list = types.InlineKeyboardButton('List of hotels', callback_data='hotels')
     sights_list = types.InlineKeyboardButton('List of sights', callback_data='attractions')
-    shortest_route = types.InlineKeyboardButton('Shortest route', callback_data='shortest_route')
+    shortest_route = types.InlineKeyboardButton('Distribution of Hotel Price Categories', callback_data='statistics')
     markup.add(calculations, hotels_list, sights_list, shortest_route)
     bot.send_message(message.chat.id, "Welcome to the Hotel Bot! Please choose an option:", reply_markup=markup)
 
@@ -84,7 +85,7 @@ def handle_input(message):
 @bot.callback_query_handler(func=lambda call: True)
 def answer(callback):
     ds = DataSetup()
-    sc = ServerConnection('127.0.0.1', 8888)
+    sc = ServerConnection('0.0.0.0', 8888)
     sc.connect()
     if callback.data == 'hotels':
         xlsx_file_path = ds.generate_excel_file(ds.get_hotels_names())
@@ -149,6 +150,52 @@ def answer(callback):
     elif callback.data == 'shortest_route':
         bot.send_message(callback.message.chat.id, 'Enter the names of hotels (Ex. HotelA, HotelB):')
         awaiting_input[callback.message.chat.id] = 'shortest_route'
+    elif callback.data == 'statistics':
+        dl = DataLoader('../JsonData/hotels_data.json')
+        hotels_data = dl.load_data()
+
+        price_categories = {
+            'Budget (< $100)': 0,
+            'Mid-range ($100 - $300)': 0,
+            'Luxury (> $300)': 0
+        }
+
+        for hotel in hotels_data:
+            try:
+                price_str = hotel.get('price', '').replace('$', '').replace(',', '')
+                price = float(price_str)
+
+                if price < 100:
+                    price_categories['Budget (< $100)'] += 1
+                elif 100 <= price <= 300:
+                    price_categories['Mid-range ($100 - $300)'] += 1
+                else:
+                    price_categories['Luxury (> $300)'] += 1
+            except ValueError:
+                continue
+
+        labels = price_categories.keys()
+        sizes = price_categories.values()
+
+        plt.figure(figsize=(8, 8))
+        plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=['#1f77b4', '#ff7f0e', '#2ca02c'])
+        plt.title('Distribution of Hotel Price Categories')
+
+        # Add notes explaining the price ranges
+        note_text = """
+        Budget: Price < $100
+        Mid-range: $100 <= Price <= $300
+        Luxury: Price > $300
+        """
+        plt.gcf().text(0.5, 0.02, note_text, ha='center', fontsize=12, bbox=dict(facecolor='lightgrey', alpha=0.5))
+
+        image_path = './hotel_price_distribution.png'
+        plt.savefig(image_path)
+
+        with open(image_path, 'rb') as image_file:
+            bot.send_photo(callback.message.chat.id, image_file, caption="Here's the hotel price distribution chart!")
+
+        os.remove(image_path)
 
 
 bot.infinity_polling()
