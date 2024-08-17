@@ -84,9 +84,6 @@ def handle_input(message):
         handle_top_hotels(callback_data, message, hotels_list)
     elif callback_data == 'distance':
         handle_distance_between_hotels(message, hotels_list)
-    elif callback_data == 'shortest_route':
-        # Handle the shortest route logic here
-        pass
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -152,10 +149,6 @@ def answer(callback):
     elif callback.data == 'correlation_price_rating':
         response = sc.send_message(b'correlation_price_rating\n')
         bot.send_message(callback.message.chat.id, response)
-
-    elif callback.data == 'shortest_route':
-        bot.send_message(callback.message.chat.id, 'Enter the names of hotels (Ex. HotelA, HotelB):')
-        awaiting_input[callback.message.chat.id] = 'shortest_route'
 
     elif callback.data == 'statistics':
         dl = DataLoader('../JsonData/hotels_data.json')
