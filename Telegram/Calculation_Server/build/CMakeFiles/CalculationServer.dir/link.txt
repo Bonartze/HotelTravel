@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/CalculationServer.dir/Server.cpp.o CMakeFiles/CalculationServer.dir/Calculations.cpp.o -o CalculationServer  /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0 
