@@ -18,11 +18,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Clone nlohmann/json
-        run: |
-          sudo mkdir third_party
-          git clone https://github.com/nlohmann/json.git /third_party/
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
