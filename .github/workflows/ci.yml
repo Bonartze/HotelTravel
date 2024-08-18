@@ -30,20 +30,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake g++ libboost-all-dev flake8 black
 
-      - name: Build C++ Server
-        run: |
-          cd Telegram/Calculation_Server
-          mkdir -p build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON
-          make VERBOSE=1
-
       - name: Run Linters
         run: |
           chmod +x ./run_linters.sh
           ./run_linters.sh
 
-      - name: Start Servers
+      - name: Start Server
         run: |
           chmod +x ./run_server.sh
           ./run_server.sh > server_output.log 2>&1 &
