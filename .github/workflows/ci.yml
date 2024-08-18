@@ -30,21 +30,21 @@ jobs:
 
       - name: Run Linters
         run: |
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+          chmod +x ./run_linters.sh
+          ./run_linters.sh
 
       - name: Start Servers
         run: |
           chmod +x ./run_server.sh
-          nohup ./run_server.sh &  # Run the server in the background
+          nohup ./run_server.sh &
 
       - name: Wait for Server to Start
         run: |
-          sleep 5  # Wait for the server to initialize, adjust the time as needed
+          sleep 5
 
       - name: Run Tests
         run: pytest --maxfail=1 --disable-warnings
 
       - name: Cleanup Background Processes
         run: |
-          pkill -f run_server.sh  # Kill the server after tests are done
+          pkill -f run_server.sh
