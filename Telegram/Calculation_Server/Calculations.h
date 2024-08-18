@@ -4,7 +4,7 @@
 #include <iostream>
 #include <any>
 #include <string>
-#include "nlohmann/json.hpp"
+#include </../../third_party/json/include/nlohmann/json.hpp>
 #include <fstream>
 #include <cmath>
 
