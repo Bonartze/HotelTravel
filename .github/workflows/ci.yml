@@ -28,11 +28,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Boost Libraries
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake libboost-all-dev
-
       - name: Run Linters
         run: |
           chmod +x ./run_linters.sh
