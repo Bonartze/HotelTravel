@@ -20,7 +20,7 @@ jobs:
 
       - name: Clone nlohmann/json
         run: |
-          git clone https://github.com/nlohmann/json.git Telegram/Calculation_Server/third_party/json
+          git clone https://github.com/nlohmann/json.git /third_party/json
 
       - name: Set up Python
         uses: actions/setup-python@v4
