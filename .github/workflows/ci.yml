@@ -18,6 +18,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Clone nlohmann/json
+        run: |
+          git clone https://github.com/nlohmann/json.git Telegram/Calculation_Server/third_party/json
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
