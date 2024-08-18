@@ -3,7 +3,7 @@
 echo "Running CalculationServer..."
 
 cd ./Telegram/Calculation_Server/ || exit 1
-rm -rf build # Remove the existing build directory
+rm -rf build
 mkdir -p build
 cd build || exit 1
 
@@ -17,4 +17,4 @@ if [ ! -f "./CalculationServer" ]; then
     exit 1
 fi
 
-./CalculationServer
+./CalculationServer &
