@@ -18,3 +18,5 @@ if [ ! -f "./CalculationServer" ]; then
 fi
 
 ./CalculationServer &
+
+cd ../../
