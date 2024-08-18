@@ -1,5 +1,5 @@
 pydeck==0.7.1
-streamlit==1.18.1
+streamlit
 numpy
 pandas
 openpyxl
