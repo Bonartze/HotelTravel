@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          submodules: true  # Ensure submodules are checked out
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -28,27 +30,34 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libboost-all-dev flake8 black
+          sudo apt-get install -y cmake g++ libboost-all-dev nlohmann-json3-dev flake8 black
 
       - name: Run Linters
         run: |
           chmod +x ./run_linters.sh
           ./run_linters.sh
 
-      - name: Start Server
+      - name: Build Server
         run: |
-          chmod +x ./run_server.sh
-          ./run_server.sh > server_output.log 2>&1 &
+          cd Telegram/Calculation_Server
+          mkdir -p build
+          cd build
+          cmake ..
+          make
+
+      - name: Start Servers
+        run: |
+          cd Telegram/Calculation_Server/build
+          nohup ./CalculationServer > server_output.log 2>&1 &
 
       - name: Wait for Server to Start
         run: |
-          sleep 5
-
+          sleep 10
 
       - name: Check if Server is Running
         run: |
           if ! nc -zv 127.0.0.1 8888; then
-            cat server_output.log
+            cat Telegram/Calculation_Server/build/server_output.log
             echo "Server failed to start."
             exit 1
           fi
@@ -57,4 +66,5 @@ jobs:
         run: pytest --maxfail=1 --disable-warnings
 
       - name: Cleanup Background Processes
-        run: pkill -f run_server.sh
+        run: |
+          pkill -f CalculationServer
