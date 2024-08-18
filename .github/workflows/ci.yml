@@ -28,6 +28,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Boost Libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libboost-all-dev cmake=3.22.0
+
       - name: Run Linters
         run: |
           chmod +x ./run_linters.sh
@@ -36,11 +41,19 @@ jobs:
       - name: Start Servers
         run: |
           chmod +x ./run_server.sh
-          nohup ./run_server.sh &
+          ./run_server.sh > server_output.log 2>&1 &
 
       - name: Wait for Server to Start
         run: |
           sleep 10
+
+      - name: Check if Server is Running
+        run: |
+          if ! nc -zv 127.0.0.1 8888; then
+            cat server_output.log
+            echo "Server failed to start."
+            exit 1
+          fi
 
       - name: Run Tests
         run: pytest --maxfail=1 --disable-warnings
