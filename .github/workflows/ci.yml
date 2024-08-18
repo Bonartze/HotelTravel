@@ -20,6 +20,7 @@ jobs:
 
       - name: Clone nlohmann/json
         run: |
+          mkdir /third_party/
           git clone https://github.com/nlohmann/json.git /third_party/
 
       - name: Set up Python
