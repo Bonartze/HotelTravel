@@ -44,7 +44,7 @@ Just follow the link (it's deployed app on Streamlit):`https://hoteltravel-7u2nb
 
 ## Usage
 
-- Open the Streamlit app in your browser at `http://localhost:8501` (If you launched web locally, using docker).
+- Open the Streamlit app in your browser at `http://localhost:8501` (If you launched it locally, using docker).
 - Use the interactive map to explore hotels and attractions.
 - Access the Telegram bot using `/start` command and explore features like distance calculations, hotel ratings, and
   more.
