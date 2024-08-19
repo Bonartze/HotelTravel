@@ -28,7 +28,7 @@ Just follow the link (it's deployed app on Streamlit):`https://hoteltravel-7u2nb
 
 1. Clone the repository:
     ```bash
-   git@github.com:Bonartze/HotelTravel.git 
+   git clone git@github.com:Bonartze/HotelTravel.git 
 
 2. Navigate to the project directory:
     ```bash
