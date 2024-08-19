@@ -40,15 +40,14 @@ class MapGenerator:
 
         for sight in self.sights_data:
             if 'coordinates' in sight and sight['coordinates'] != 'Not found':
-                if selected_city == 'All cities' or str(selected_city) in sight['address']:
-                    data_df['name'].append(sight['name'])
-                    data_df['latitude'].append(sight['coordinates'][0])
-                    data_df['longitude'].append(sight['coordinates'][1])
-                    data_df['price'].append(0)
-                    data_df['website_https'].append(sight.get('website_link', 'No website available'))
-                    data_df['hotel_evaluation'].append('Not evaluated')
-                    data_df['preview_comment'].append(sight.get('preview_comment', 'No preview comment'))
-                    data_df['picture_https'].append(sight.get('picture_https', 'No picture available'))
+                data_df['name'].append(sight['name'])
+                data_df['latitude'].append(sight['coordinates'][0])
+                data_df['longitude'].append(sight['coordinates'][1])
+                data_df['price'].append(0)
+                data_df['website_https'].append(sight.get('website_link', 'No website available'))
+                data_df['hotel_evaluation'].append('Not evaluated')
+                data_df['preview_comment'].append(sight.get('preview_comment', 'No preview comment'))
+                data_df['picture_https'].append(sight.get('picture_https', 'No picture available'))
 
         df = pd.DataFrame(data_df)
 

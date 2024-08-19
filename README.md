@@ -14,7 +14,7 @@ simple statistical features.
 
 ## Technologies Used
 
-- Python (Streamlit, Pydeck, TeleBot, Pytest)
+- Python (Streamlit, Pydeck, TeleBot, Pytest, BeautifulSoap4, Geopy)
 - Docker for containerization
 - C++ (Asio + nlohmann/json) for server-side calculations
 - GitHub Actions for CI/CD
